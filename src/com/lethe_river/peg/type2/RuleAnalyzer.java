@@ -11,6 +11,11 @@ import java.util.Set;
 
 import com.lethe_river.peg.type2.Rule.Kind;
 
+/**
+ * 文法を可視化するための解析器
+ *
+ * @author YuyaAizawa
+ */
 public class RuleAnalyzer {
 	private static final Set<Kind> EXPAND_RULE = EnumSet.of(
 			Kind.STAR,
@@ -32,7 +37,7 @@ public class RuleAnalyzer {
 		setName(parser.getRule(), name);
 	}
 
-	public void analysis(Rule start, StringBuilder sb) {
+	public void analyze(Rule start, StringBuilder sb) {
 		Queue<Rule> toAnalyze = new ArrayDeque<>();
 		Set<Rule> analyzed = new HashSet<>();
 
@@ -44,6 +49,7 @@ public class RuleAnalyzer {
 
 			target.rules()
 					.stream()
+					.map(r -> EXPAND_RULE.contains(r.kind()) ? r.rules().get(0) : r)
 					.filter(r -> ruleNames.containsKey(r) || (r.kind() != Kind.TERM && !EXPAND_RULE.contains(r.kind())))
 //					.filter(r -> ruleNames.containsKey(r) || r.kind() != Kind.TERM)
 					.filter(r -> !analyzed.contains(r))
@@ -52,13 +58,13 @@ public class RuleAnalyzer {
 		}
 
 	}
-	public void analysis(Rule start) {
+	public void analyze(Rule start) {
 		StringBuilder sb = new StringBuilder();
-		analysis(start, sb);
+		analyze(start, sb);
 		System.out.print(sb.toString());
 	}
-	public void analysis(Parser<?> start) {
-		analysis(start.getRule());
+	public void analyze(Parser<?> start) {
+		analyze(start.getRule());
 	}
 
 	public void descrive(Rule rule, StringBuilder sb) {
