@@ -90,6 +90,12 @@ public abstract class Parser<T> {
 			}
 		};
 	}
+	public Parser<T> then(VoidParser following) {
+		return then(following, (p, f) -> p);
+	}
+	public Parser<T> then(String str) {
+		return then(Parser.of(str));
+	}
 
 	public static <T> Parser<T> or(
 			Supplier<Parser<? extends T>> first,
@@ -175,14 +181,12 @@ public abstract class Parser<T> {
 		};
 	}
 
-	public static Parser<Void> and(Parser<?> original) {
-		return new Parser<>(new Rule.AndPredicate(original.rule)) {
-			@Override
-			protected Void eval(Source src, Memo memo) {
-				return null;
-			}
+	public static VoidParser and(Parser<?> original) {
+		return new VoidParser(new Rule.AndPredicate(original.rule));
+	}
 
-		};
+	public static VoidParser not(Parser<?> original) {
+		return new VoidParser(new Rule.NotPredicate(original.rule));
 	}
 
 	public <U> Parser<U> map(Function<? super T, ? extends U> mapper) {
@@ -194,31 +198,12 @@ public abstract class Parser<T> {
 		};
 	}
 
-	public static Parser<Void> not(Parser<?> original) {
-		return new Parser<>(new Rule.NotPredicate(original.rule)) {
-			@Override
-			protected Void eval(Source src, Memo memo) {
-				return null;
-			}
-		};
+	public static VoidParser of(String str) {
+		return new VoidParser(new Rule.FullMatch(str));
 	}
 
-	public static Parser<Void> of(String str) {
-		return new Parser<>(new Rule.FullMatch(str)) {
-			@Override
-			protected Void eval(Source src, Memo memo) {
-				return null;
-			}
-		};
-	}
-
-	public static Parser<Void> of(Rule rule) {
-		return new Parser<>(rule) {
-			@Override
-			protected Void eval(Source src, Memo memo) {
-				return null;
-			}
-		};
+	public static VoidParser of(Rule rule) {
+		return new VoidParser(rule);
 	}
 
 	public static Parser<Character> character(CharPredicate predicate, String description) {
