@@ -198,6 +198,10 @@ public abstract class Parser<T> {
 		};
 	}
 
+	public VoidParser toVoid() {
+		return new VoidParser(getRule());
+	}
+
 	public static VoidParser of(String str) {
 		return new VoidParser(new Rule.FullMatch(str));
 	}
