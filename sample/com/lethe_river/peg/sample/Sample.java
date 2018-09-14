@@ -33,7 +33,7 @@ public class Sample {
 		Parser<List<Integer>> intListParser =
 				Parser.of("[").then(intSeqParser).then("]"); // <intList> ::= "[" <intSeq> "]"
 
-		List<Integer> parsed = intListParser.parse(list.toString()).value; // パース実行
+		List<Integer> parsed = intListParser.parse(list.toString()); // パース実行
 		System.out.println(String.format("parsed = %s%n", parsed));
 
 

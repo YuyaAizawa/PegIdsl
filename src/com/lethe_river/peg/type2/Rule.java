@@ -152,6 +152,7 @@ public abstract class Rule {
 	public static class Choice extends Rule {
 		private final List<Supplier<Rule>> ruleSuppliers;
 		private List<Rule> rules;
+		@SafeVarargs
 		public Choice(Supplier<Rule> first, Supplier<Rule>... rest) {
 			this(Stream.concat(
 							Stream.of(first),

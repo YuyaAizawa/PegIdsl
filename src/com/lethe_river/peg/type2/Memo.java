@@ -1,8 +1,5 @@
 package com.lethe_river.peg.type2;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.lethe_river.util.primitive.LongIntMap;
 import com.lethe_river.util.primitive.ScatterLongIntMap;
 
@@ -41,9 +38,15 @@ interface Memo {
 	public static Memo noMemo() {
 		return new Memo() {
 			@Override
-			public void putError(Rule rule, int start) {}
+			public void putError(Rule rule, int start) {
+				// do nothing
+			}
+
 			@Override
-			public void putEnd(Rule rule, int start, int end) {}
+			public void putEnd(Rule rule, int start, int end) {
+				// do nothing
+			}
+
 			@Override
 			public int getEnd(Rule rule, int start) {
 				return NULL;
@@ -54,7 +57,6 @@ interface Memo {
 	public static Memo fullMemo() {
 		return new Memo() {
 			LongIntMap map = new ScatterLongIntMap();
-			Map<Long, Object> valueMap = new HashMap<>();
 
 			@Override
 			public void putError(Rule rule, int start) {

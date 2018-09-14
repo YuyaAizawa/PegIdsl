@@ -55,10 +55,9 @@ public abstract class Rule {
 			if(eval(src, memo)) {
 				memo.putEnd(this, start, src.index());
 				return true;
-			} else {
-				memo.putError(this, start);
-				return false;
 			}
+			memo.putError(this, start);
+			return false;
 		default:
 			src.jump(r);
 			return true;
@@ -152,6 +151,7 @@ public abstract class Rule {
 	public static class Choice extends Rule {
 		private final List<Supplier<Rule>> ruleSupplier;
 		private List<Rule> rules;
+		@SafeVarargs
 		public Choice(Supplier<Rule> first, Supplier<Rule>... rest) {
 			this.ruleSupplier = Stream.concat(
 							Stream.of(first),

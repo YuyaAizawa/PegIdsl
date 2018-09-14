@@ -31,7 +31,7 @@ public class ParserTest {
 	@Test
 	public void intListTest() {
 		IntList expected = ArrayIntList.of(1, 2, 3);
-		IntList actual   = intListParser.parse(expected.toString()).value;
+		IntList actual   = intListParser.parse(expected.toString());
 
 		assertEquals(expected, actual);
 	}

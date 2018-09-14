@@ -80,7 +80,7 @@ public interface Source {
 				chars = new char[src.length()];
 				OfInt itr = src.chars().iterator();
 				for (int i = 0; i < chars.length; i++) {
-					chars[i] = (char)(int)itr.next();
+					chars[i] = (char)itr.nextInt();
 				}
 			} catch(NoSuchElementException e) {
 				throw new Error(e);
@@ -137,7 +137,7 @@ public interface Source {
 		public int lineNum() {
 			int idx = Arrays.binarySearch(breakIndexes, pos);
 			if(idx >= 0) {
-				// on breakcode
+				// on break
 				return idx + 1;
 			} else {
 				// otherwise

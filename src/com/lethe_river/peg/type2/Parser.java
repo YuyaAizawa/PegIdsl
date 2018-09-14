@@ -29,7 +29,7 @@ public abstract class Parser<T> {
 	 * @param src 文字列
 	 * @return 結果オブジェクト(パース失敗時はempty)
 	 */
-	public final ParseResult<T> parse(CharSequence src) {
+	public final T parse(CharSequence src) {
 		return parse(Source.from(src), Memo.fullMemo());
 	}
 
@@ -44,7 +44,7 @@ public abstract class Parser<T> {
 	 * @return 解析結果
 	 * @throws ParseException 解析失敗の場合
 	 */
-	protected ParseResult<T> parse(Source src, Memo memo) {
+	protected T parse(Source src, Memo memo) {
 		int start = src.index();
 		if(!getRule().parse(src, memo)) {
 			src.jump(start);
@@ -55,7 +55,8 @@ public abstract class Parser<T> {
 		src.jump(start);
 		T t = eval(src, memo);
 		src.jump(end);
-		return new ParseResult<>(t, new Location(src, start, end));
+
+		return t;
 	}
 
 	/**
@@ -85,8 +86,8 @@ public abstract class Parser<T> {
 			@Override
 			protected R eval(Source src, Memo memo) {
 				return combiner.apply(
-						Parser.this.parse(src, memo).value,
-						following.parse(src, memo).value);
+						Parser.this.parse(src, memo),
+						following.parse(src, memo));
 			}
 		};
 	}
@@ -97,6 +98,7 @@ public abstract class Parser<T> {
 		return then(Parser.of(str));
 	}
 
+	@SafeVarargs
 	public static <T> Parser<T> or(
 			Supplier<Parser<? extends T>> first,
 			Supplier<Parser<? extends T>>... rest) {
@@ -125,7 +127,7 @@ public abstract class Parser<T> {
 							Parser<? extends T> parser = ip.next().get();
 							if(rule.parse(src, memo)) {
 								src.jump(start);
-								return parser.parse(src, memo).value;
+								return parser.parse(src, memo);
 							}
 							src.jump(start);
 						}
@@ -142,7 +144,7 @@ public abstract class Parser<T> {
 				while(Parser.this.rule.parse(src, memo)) {
 					int next = src.index();
 					src.jump(pos);
-					list.add(Parser.this.parse(src, memo).value);
+					list.add(Parser.this.parse(src, memo));
 					pos = next;
 				}
 				return list;
@@ -159,7 +161,7 @@ public abstract class Parser<T> {
 				while(Parser.this.rule.parse(src, memo)) {
 					int next = src.index();
 					src.jump(pos);
-					list.add(Parser.this.parse(src, memo).value);
+					list.add(Parser.this.parse(src, memo));
 					pos = next;
 				}
 				return list;
@@ -198,6 +200,22 @@ public abstract class Parser<T> {
 		};
 	}
 
+	public Parser<ResultWithLocation<T>> withLocation() {
+		return new Parser<>(this.rule) {
+			@Override
+			protected ResultWithLocation<T> eval(Source src, Memo memo) {
+
+				int start = src.index();
+				T result = Parser.this.eval(src, memo);
+				int end = src.index();
+
+				Location location = new Location(src, start, end);
+				ResultWithLocation<T> resultWithLocation = new ResultWithLocation<>(result, location);
+				return resultWithLocation;
+			}
+		};
+	}
+
 	public VoidParser toVoid() {
 		return new VoidParser(getRule());
 	}
@@ -214,7 +232,7 @@ public abstract class Parser<T> {
 		return new Parser<>(new Rule.PredicatedChar(predicate, description)) {
 			@Override
 			protected Character eval(Source src, Memo memo) {
-				return src.next();
+				return Character.valueOf(src.next());
 			}
 		};
 	}
