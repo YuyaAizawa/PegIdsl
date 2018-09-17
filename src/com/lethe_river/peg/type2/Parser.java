@@ -28,6 +28,7 @@ public abstract class Parser<T> {
 	 * 文字列からオブジェクトを読み取る
 	 * @param src 文字列
 	 * @return 結果オブジェクト(パース失敗時はempty)
+	 * @throws ParseException 解析失敗の場合
 	 */
 	public final T parse(CharSequence src) {
 		return parse(Source.from(src), Memo.fullMemo());
@@ -61,9 +62,13 @@ public abstract class Parser<T> {
 
 	/**
 	 * ソースからオブジェクトを読み取って返す.
-	 * ruleに対するparseが成功したときに，ソースの成功した読み取り開始位置に関して呼出される.
+	 *
+	 * ruleに対するparseが成功したときに，ソースの成功した読み取り開始位置に対して呼出される.
+	 *
 	 * @param src ソース
 	 * @param memo 内部のParserのparseメソッドの引数に渡すための引数
+	 * @return 読み取り結果
+	 * @exception ParseException 解析失敗の場合
 	 */
 	protected abstract T eval(Source src, Memo memo);
 
@@ -122,7 +127,7 @@ public abstract class Parser<T> {
 						Iterator<Supplier<Parser<? extends T>>> ip = parsers.iterator();
 						Iterator<Supplier<Rule>> ir = rules.iterator();
 
-						for(;;) {
+						while(ir.hasNext()) {
 							Rule rule = ir.next().get();
 							Parser<? extends T> parser = ip.next().get();
 							if(rule.parse(src, memo)) {
@@ -131,6 +136,8 @@ public abstract class Parser<T> {
 							}
 							src.jump(start);
 						}
+						// 到達しないはず，Rule#parseが偽を返しているはず
+						throw new Error();
 					}
 		};
 	}
@@ -293,9 +300,4 @@ public abstract class Parser<T> {
  *   - 処理が高速
  *   - この部分で高速にする意味はない
  *   - 論外
- *
- *
- *
- * ASTのメモは必要か
- *
  */
