@@ -1,4 +1,4 @@
-package com.lethe_river.peg.sample;
+package sample.com.lethe_river.peg.sample;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Sample {
 
 		Parser<Integer> commaSpaceIntParser =
 				Parser.of(", ").then(intParser, // <commaSpaceInt> ::= ", " <int>
-						(v, i) -> i); // 結果は<int>を反映
+						(v, i) -> i); // 結果は<int>を反�?
 
 		Parser<List<Integer>> intSeqParser =
 				intParser.then(commaSpaceIntParser.star(), // <intSeq> ::= <int> <commaSpaceInt>*
@@ -33,12 +33,12 @@ public class Sample {
 		Parser<List<Integer>> intListParser =
 				Parser.of("[").then(intSeqParser).then("]"); // <intList> ::= "[" <intSeq> "]"
 
-		List<Integer> parsed = intListParser.parse(list.toString()); // パース実行
+		List<Integer> parsed = intListParser.parse(list.toString()); // パ�?�ス実�?
 		System.out.println(String.format("parsed = %s%n", parsed));
 
 
 
-		// パーサの構造を確認
+		// パ�?�サの構�??を確�?
 		RuleAnalyzer analyzer = new RuleAnalyzer();
 		analyzer.setName(intListParser, "intSeqParser");
 		analyzer.analyze(intListParser);

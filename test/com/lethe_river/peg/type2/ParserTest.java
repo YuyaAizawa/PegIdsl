@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.Test;
 
-import com.lethe_river.util.primitive.ArrayIntList;
-import com.lethe_river.util.primitive.IntList;
+import com.lethe_river.util.primitive.collection.ArrayIntList;
+import com.lethe_river.util.primitive.collection.IntList;
 
 public class ParserTest {
 	Parser<Integer> intParser =

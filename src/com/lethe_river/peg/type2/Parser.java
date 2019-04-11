@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.lethe_river.util.primitive.CharPredicate;
+import com.lethe_river.util.primitive.function.CharPredicate;
 
 /**
  * ソースからオブジェクトを読み取る解析表現文法パーサ.

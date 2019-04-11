@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.PrimitiveIterator.OfInt;
 
-import com.lethe_river.util.primitive.ArrayIntList;
+import com.lethe_river.util.primitive.collection.ArrayIntList;
 
 /**
  * Parserが読み取るためのデータ

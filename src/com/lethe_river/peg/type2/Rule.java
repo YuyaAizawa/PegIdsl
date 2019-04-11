@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.lethe_river.util.primitive.CharPredicate;
+import com.lethe_river.util.primitive.function.CharPredicate;
 
 /**
  * 解析表現文法を表すクラス．解析結果のメモを利用できる．

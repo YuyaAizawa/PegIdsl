@@ -1,7 +1,7 @@
 package com.lethe_river.peg.type2;
 
-import com.lethe_river.util.primitive.LongIntMap;
-import com.lethe_river.util.primitive.ScatterLongIntMap;
+import com.lethe_river.util.primitive.collection.LongIntMap;
+import com.lethe_river.util.primitive.collection.ScatterLongIntMap;
 
 /**
  * 解析表現文法のパース結果をメモするクラス．
